@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hey</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #f4f4f4;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.9);
+      padding: 2rem;
+      border-radius: 16px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      animation: fadeIn 1.2s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    h2 {
+      color: #e63946;
+      margin-top: 1rem;
+    }
+
+    p {
+      color: #555;
+      font-size: 1rem;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 24px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: #333;
+      color: white;
+      transition: transform 0.2s ease, background 0.2s ease;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #e63946;
+    }
+
+    #noBtn {
+      background: #ccc;
+      color: #333;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .hearts {
+      position: fixed;
+      bottom: -20px;
+      font-size: 26px;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.85;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-120vh); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- FIRST PAGE: SUBTLE -->
+  <div class="card" id="intro">
+    <h1>Hey</h1>
+    <p>I wanted to show you something.</p>
+    <p>Click below when you're ready 👀</p>
+    <button id="revealBtn">Continue</button>
+  </div>
+
+  <script>
+    const revealBtn = document.getElementById("revealBtn");
+
+    revealBtn.addEventListener("click", () => {
+      // SECOND PAGE: VALENTINE + GRADIENT + YOUTUBE SONG
+      document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
+      document.body.innerHTML = `
+        <div class="card">
+          <h1>Surprise! 🫶</h1>
+          <h2>Will you be my Valentine? 💘</h2>
+          <div style="margin-top: 2rem;">
+            <button id="yesBtn">Yes 💖</button>
+            <button id="noBtn">No 😅</button>
+          </div>
+          <!-- YouTube song embed -->
+          <iframe id="valentineSong" 
+            width="0" height="0"
+            src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&loop=1&playlist=YOUR_VIDEO_ID&controls=0&mute=0" 
+            title="Valentine Song" 
+            frameborder="0" 
+            allow="autoplay; encrypted-media" 
+            allowfullscreen>
+          </iframe>
+        </div>
+      `;
+
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+
+      // NO button chasing logic
+      let chasing = false;
+
+      noBtn.addEventListener("mouseover", () => { chasing = true; moveNoButton(); });
+      noBtn.addEventListener("touchstart", () => { chasing = true; moveNoButton(); });
+
+      function moveNoButton() {
+        if (!chasing) return;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const bw = noBtn.offsetWidth;
+        const bh = noBtn.offsetHeight;
+
+        noBtn.style.position = "fixed"; // allow free movement
+        noBtn.style.left = Math.random() * (vw - bw) + "px";
+        noBtn.style.top = Math.random() * (vh - bh) + "px";
+      }
+
+      // Floating emojis
+      const emojis = ["🫶", "💖", "💕", "💘", "🥰", "😍"];
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "hearts";
+        heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }, 500);
+
+      // YES click -> CELEBRATION
+      yesBtn.addEventListener("click", () => {
+        // Stop YouTube song
+        const song = document.getElementById("valentineSong");
+        if(song) song.remove(); // removes iframe so audio stops
+
+        document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
+        document.body.innerHTML = `
+          <div style="
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            height:100vh;
+            color:white;
+            text-align:center;
+            font-family:'Segoe UI', sans-serif;
+            animation: fadeIn 1s ease;
+          ">
+            <h1 style="font-size:3rem;">YAY!!! 🫶💕💖</h1>
+            <p style="font-size:1.3rem;">You just made my day 🥰</p>
+            <p style="font-size:1.1rem;">Happy Valentine’s Day 💘</p>
+          </div>
+        `;
+
+        const celebrationEmojis = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
+        setInterval(() => {
+          const heart = document.createElement("div");
+          heart.className = "hearts";
+          heart.style.fontSize = Math.random()*24 + 24 + "px";
+          heart.innerText = celebrationEmojis[Math.floor(Math.random()*celebrationEmojis.length)];
+          heart.style.left = Math.random() * 100 + "vw";
+          heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 6000);
+        }, 300);
+      });
+    });
+  </script>
+
+</body>
+</html>
