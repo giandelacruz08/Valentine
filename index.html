@@ -66,7 +66,7 @@ button {
 button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
-  position: relative; /* starts aligned with Yes */
+  position: relative;
   background: #ccc;
   color: #333;
   transition: left 0.3s ease, top 0.3s ease;
@@ -95,8 +95,8 @@ button:hover { transform: scale(1.05); background: #e63946; }
   <button id="revealBtn">Continue</button>
 </div>
 
-<!-- Audio element created at start -->
-<audio id="bgMusic" loop>
+<!-- Audio element stays in DOM, no loop -->
+<audio id="bgMusic">
   <source src="audio/audiounchained-melody.mp3" type="audio/mpeg">
 </audio>
 
@@ -105,12 +105,11 @@ const revealBtn = document.getElementById("revealBtn");
 const audio = document.getElementById("bgMusic");
 audio.volume = 0.6;
 
-// Play audio on first interaction (required by browsers)
-const playAudioOnInteraction = () => {
+// Play audio once on first interaction
+document.body.addEventListener('click', function playAudioOnce() {
   audio.play().catch(()=>{});
-  document.body.removeEventListener('click', playAudioOnInteraction);
-};
-document.body.addEventListener('click', playAudioOnInteraction);
+  document.body.removeEventListener('click', playAudioOnce);
+});
 
 revealBtn.addEventListener("click", () => {
   document.body.innerHTML = "";
@@ -129,7 +128,6 @@ revealBtn.addEventListener("click", () => {
   img.src = "images/picture.jpg";
   img.alt = "Valentine Surprise";
 
-  // Buttons
   const btnContainer = document.createElement("div");
   btnContainer.className = "btn-container";
 
@@ -162,9 +160,8 @@ revealBtn.addEventListener("click", () => {
     setTimeout(()=>heart.remove(),6000);
   },500);
 
-  // NO button chasing logic
   const chaseNoButton = () => {
-    noBtn.style.position = "fixed"; // free movement
+    noBtn.style.position = "fixed";
     const vw = window.innerWidth - noBtn.offsetWidth;
     const vh = window.innerHeight - noBtn.offsetHeight;
     let newX = Math.random() * vw;
@@ -175,7 +172,6 @@ revealBtn.addEventListener("click", () => {
   noBtn.addEventListener("mouseover", chaseNoButton);
   noBtn.addEventListener("touchstart", chaseNoButton);
 
-  // YES button click
   yesBtn.addEventListener("click", ()=>{
     audio.pause(); // stop music here if you want
     document.body.innerHTML = "";
@@ -187,9 +183,8 @@ revealBtn.addEventListener("click", () => {
     const title = document.createElement("h1");
     title.textContent = "YAY!!! 🫶💕💖";
 
-    // GIF below the title
     const gif = document.createElement("img");
-    gif.src = "images/kim.gif";  // your GIF
+    gif.src = "images/kim.gif";
     gif.alt = "Valentine GIF";
 
     const message1 = document.createElement("p");
@@ -201,7 +196,7 @@ revealBtn.addEventListener("click", () => {
     message2.textContent = "Just dress nicely, I've planned everything for us 💘";
 
     card.appendChild(title);
-    card.appendChild(gif);      // GIF inserted here
+    card.appendChild(gif);
     card.appendChild(message1);
     card.appendChild(message2);
     document.body.appendChild(card);
@@ -223,4 +218,3 @@ revealBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
