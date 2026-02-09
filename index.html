@@ -95,7 +95,7 @@ button:hover { transform: scale(1.05); background: #e63946; }
   <button id="revealBtn">Continue</button>
 </div>
 
-<!-- Audio element stays in DOM, no loop -->
+<!-- Audio element stays in DOM -->
 <audio id="bgMusic">
   <source src="audio/audiounchained-melody.mp3" type="audio/mpeg">
 </audio>
@@ -106,10 +106,13 @@ const audio = document.getElementById("bgMusic");
 audio.volume = 0.6;
 
 revealBtn.addEventListener("click", () => {
-  // Play music once on Continue click
+  // Play music once
   audio.play().catch(()=>{});
 
-  document.body.innerHTML = "";
+  // Remove only the first card, keep audio
+  const firstCard = document.getElementById("firstPage");
+  firstCard.remove();
+
   document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
 
   const card = document.createElement("div");
@@ -170,7 +173,7 @@ revealBtn.addEventListener("click", () => {
   noBtn.addEventListener("touchstart", chaseNoButton);
 
   yesBtn.addEventListener("click", ()=>{
-    audio.pause(); // stop music here if desired
+    audio.pause(); // stop music if you want
     document.body.innerHTML = "";
     document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4)";
 
@@ -200,4 +203,18 @@ revealBtn.addEventListener("click", () => {
 
     const celebration = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
     setInterval(()=>{
-      const heart = document.c
+      const heart = document.createElement("div");
+      heart.className="hearts";
+      heart.style.fontSize = Math.random()*24+24+"px";
+      heart.innerText = celebration[Math.floor(Math.random()*celebration.length)];
+      heart.style.left = Math.random()*100+"vw";
+      heart.style.animationDuration = (Math.random()*3+3)+"s";
+      document.body.appendChild(heart);
+      setTimeout(()=>heart.remove(),6000);
+    },300);
+  });
+});
+</script>
+
+</body>
+</html>
