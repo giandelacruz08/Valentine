@@ -106,13 +106,14 @@ const audio = document.getElementById("bgMusic");
 audio.volume = 0.6;
 
 revealBtn.addEventListener("click", () => {
-  // ✅ Music plays immediately on Continue click before DOM changes
+  // ✅ Play music immediately on Continue click
   audio.play().catch(() => {});
 
-  // Remove first card only
+  // Remove only the first card
   const firstCard = document.getElementById("firstPage");
   firstCard.remove();
 
+  // Set background for next card
   document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
 
   const card = document.createElement("div");
@@ -154,68 +155,4 @@ revealBtn.addEventListener("click", () => {
     const heart = document.createElement("div");
     heart.className="hearts";
     heart.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-    heart.style.left = Math.random()*100+"vw";
-    heart.style.animationDuration = (Math.random()*3 + 4)+"s";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),6000);
-  },500);
-
-  const chaseNoButton = () => {
-    noBtn.style.position = "fixed";
-    const vw = window.innerWidth - noBtn.offsetWidth;
-    const vh = window.innerHeight - noBtn.offsetHeight;
-    let newX = Math.random() * vw;
-    let newY = Math.random() * vh;
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
-  };
-  noBtn.addEventListener("mouseover", chaseNoButton);
-  noBtn.addEventListener("touchstart", chaseNoButton);
-
-  yesBtn.addEventListener("click", ()=>{
-    audio.pause(); // stop music if desired
-    document.body.innerHTML = "";
-    document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4)";
-
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const title = document.createElement("h1");
-    title.textContent = "YAY!!! 🫶💕💖";
-
-    const gif = document.createElement("img");
-    gif.src = "images/kim.gif";
-    gif.alt = "Valentine GIF";
-
-    const message1 = document.createElement("p");
-    message1.style.fontSize = "1.3rem";
-    message1.textContent = "Happy Valentine's, my love 🥰";
-
-    const message2 = document.createElement("p");
-    message2.style.fontSize = "1.1rem";
-    message2.textContent = "All you have to do is show up and dress nicely. I’ve planned everything for us. See you at home 💘";
-
-    card.appendChild(title);
-    card.appendChild(gif);
-    card.appendChild(message1);
-    card.appendChild(message2);
-    document.body.appendChild(card);
-
-    const celebration = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
-    setInterval(()=>{
-      const heart = document.createElement("div");
-      heart.className="hearts";
-      heart.style.fontSize = Math.random()*24+24+"px";
-      heart.innerText = celebration[Math.floor(Math.random()*celebration.length)];
-      heart.style.left = Math.random()*100+"vw";
-      heart.style.animationDuration = (Math.random()*3+3)+"s";
-      document.body.appendChild(heart);
-      setTimeout(()=>heart.remove(),6000);
-    },300);
-  });
-});
-</script>
-
-</body>
-</html>
-
+    heart.style.left =
