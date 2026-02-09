@@ -56,9 +56,6 @@
       background: #333;
       color: white;
       transition: transform 0.2s ease, background 0.2s ease;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     button:hover {
@@ -118,7 +115,7 @@
           <h1>Surprise! 🫶</h1>
           <h2>Will you be my Valentine? 💘</h2>
 
-          <div style="margin-top: 2rem;">
+          <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
             <button id="yesBtn">Yes 💖</button>
             <button id="noBtn">No 😅</button>
           </div>
@@ -137,9 +134,11 @@
       const yesBtn = document.getElementById("yesBtn");
       const noBtn = document.getElementById("noBtn");
 
-      // NO button runs away
-      noBtn.addEventListener("mouseover", moveNoButton);
-      noBtn.addEventListener("touchstart", moveNoButton);
+      // Delay NO button movement so it doesn't trigger immediately
+      setTimeout(() => {
+        noBtn.addEventListener("mouseover", moveNoButton);
+        noBtn.addEventListener("touchstart", moveNoButton);
+      }, 700);
 
       function moveNoButton() {
         const vw = window.innerWidth;
