@@ -51,7 +51,8 @@ img {
   gap: 1rem;
   margin-top: 1rem;
   width: 100%;
-  position: relative; /* relative container for NO button */
+  position: relative; /* container relative for NO button */
+  height: 50px; /* reserve vertical space */
 }
 
 button {
@@ -69,7 +70,6 @@ button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
   position: absolute;
-  left: 120px; /* initial position next to Yes button */
   top: 0;
   background: #ccc;
   color: #333;
@@ -92,9 +92,9 @@ button:hover { transform: scale(1.05); background: #e63946; }
 <body>
 
 <div class="card" id="firstPage">
-  <h1>Hey</h1>
+  <h1>Hi!</h1>
   <p>I wanted to show you something.</p>
-  <p>Click below when you're ready 👀</p>
+  <p>Click below when you're ready ☺️</p>
   <button id="revealBtn">Continue</button>
 </div>
 
@@ -125,12 +125,15 @@ revealBtn.addEventListener("click", () => {
   const yesBtn = document.createElement("button");
   yesBtn.textContent = "Yes 💖";
   yesBtn.id = "yesBtn";
+  btnContainer.appendChild(yesBtn);
 
   const noBtn = document.createElement("button");
   noBtn.textContent = "No 😅";
   noBtn.id = "noBtn";
 
-  btnContainer.appendChild(yesBtn);
+  // Position NO next to Yes
+  const rect = yesBtn.getBoundingClientRect();
+  noBtn.style.left = (rect.width + 16) + "px"; // initial left offset
   btnContainer.appendChild(noBtn);
 
   // Audio
@@ -149,7 +152,7 @@ revealBtn.addEventListener("click", () => {
   card.appendChild(audio);
   document.body.appendChild(card);
 
-  // Play audio on first click
+  // Play audio on first interaction
   audio.volume = 0.6;
   const playAudio = () => { audio.play().catch(()=>{}); document.body.removeEventListener('click', playAudio); };
   document.body.addEventListener('click', playAudio);
@@ -172,10 +175,9 @@ revealBtn.addEventListener("click", () => {
     const vh = window.innerHeight;
     const bw = noBtn.offsetWidth;
     const bh = noBtn.offsetHeight;
-    // Smooth transition
-    noBtn.style.transition = "left 0.5s ease, top 0.5s ease";
-    noBtn.style.left = Math.random()*(vw-bw)+"px";
-    noBtn.style.top = Math.random()*(vh-bh)+"px";
+    noBtn.style.transition = "left 0.4s ease, top 0.4s ease";
+    noBtn.style.left = Math.random()*(vw-bw) + "px";
+    noBtn.style.top = Math.random()*(vh-bh) + "px";
   };
 
   noBtn.addEventListener("mouseover", moveNoButton);
