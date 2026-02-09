@@ -178,13 +178,34 @@ revealBtn.addEventListener("click", () => {
   // YES button click
   yesBtn.addEventListener("click", ()=>{
     audio.pause(); // stop music here if you want
-    document.body.innerHTML = `
-      <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; color:white; font-family:'Segoe UI', sans-serif; animation: fadeIn 1s ease;">
-        <h1 style="font-size:3rem;">YAY!!! 🫶💕💖</h1>
-        <p style="font-size:1.3rem;">Happy Valentine's, my love 🥰</p>
-        <p style="font-size:1.1rem;">Just dress nicely, I've planned everything for us 💘</p>
-      </div>
-    `;
+    document.body.innerHTML = "";
+    document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4)";
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const title = document.createElement("h1");
+    title.textContent = "YAY!!! 🫶💕💖";
+
+    // GIF below the title
+    const gif = document.createElement("img");
+    gif.src = "images/kim.gif";  // your GIF
+    gif.alt = "Valentine GIF";
+
+    const message1 = document.createElement("p");
+    message1.style.fontSize = "1.3rem";
+    message1.textContent = "Happy Valentine's, my love 🥰";
+
+    const message2 = document.createElement("p");
+    message2.style.fontSize = "1.1rem";
+    message2.textContent = "Just dress nicely, I've planned everything for us 💘";
+
+    card.appendChild(title);
+    card.appendChild(gif);      // GIF inserted here
+    card.appendChild(message1);
+    card.appendChild(message2);
+    document.body.appendChild(card);
+
     const celebration = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
     setInterval(()=>{
       const heart = document.createElement("div");
@@ -202,4 +223,3 @@ revealBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
