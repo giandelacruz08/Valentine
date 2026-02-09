@@ -27,11 +27,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
     box-shadow: 0 15px 40px rgba(0,0,0,0.2);
     animation: fadeIn 1.2s ease;
     position: relative;
     z-index: 1;
+    overflow: hidden;
   }
 
   h1 { color: #333; margin-bottom: 0.5rem; font-weight: 500; }
@@ -55,8 +55,8 @@
     background: #ccc;
     color: #333;
     border-radius: 30px;
-    transition: left 0.4s ease, top 0.4s ease;
     position: fixed;
+    transition: left 0.4s ease, top 0.4s ease;
   }
 
   .hearts {
@@ -74,13 +74,13 @@
     max-height: 50vh;
     object-fit: contain;
     border-radius: 12px;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
   }
 
   .btn-container {
     display: flex;
-    gap: 1rem;
     justify-content: center;
+    gap: 1rem;
     margin-top: 1rem;
   }
 
@@ -90,6 +90,7 @@
 </head>
 <body>
 
+<!-- FIRST PAGE -->
 <div class="card" id="firstPage">
   <h1>Hey</h1>
   <p>I wanted to show you something.</p>
@@ -110,23 +111,28 @@ revealBtn.addEventListener("click", () => {
   const card = document.createElement("div");
   card.className = "card";
 
-  // Title
+  // Top content: title, subtitle, image
+  const topContent = document.createElement("div");
+  topContent.style.display = "flex";
+  topContent.style.flexDirection = "column";
+  topContent.style.alignItems = "center";
+
   const title = document.createElement("h1");
   title.textContent = "Surprise! 🫶";
-  card.appendChild(title);
+  topContent.appendChild(title);
 
-  // Subtitle
   const subtitle = document.createElement("h2");
   subtitle.textContent = "Will you be my Valentine? 💘";
-  card.appendChild(subtitle);
+  topContent.appendChild(subtitle);
 
-  // Image (cropped iPhone screenshot)
   const img = document.createElement("img");
-  img.src = "images/picture.jpg";
+  img.src = "images/picture.jpg"; // your image path
   img.alt = "Valentine Surprise";
-  card.appendChild(img);
+  topContent.appendChild(img);
 
-  // Buttons
+  card.appendChild(topContent);
+
+  // Buttons container
   const btnContainer = document.createElement("div");
   btnContainer.className = "btn-container";
 
@@ -152,7 +158,7 @@ revealBtn.addEventListener("click", () => {
   audio.appendChild(source);
   card.appendChild(audio);
 
-  // Play audio safely
+  // Play audio on click if needed
   audio.volume = 0.6;
   audio.play().catch(() => {
     document.body.addEventListener("click", function startAudio() {
@@ -221,6 +227,5 @@ revealBtn.addEventListener("click", () => {
 
 });
 </script>
-
 </body>
 </html>
