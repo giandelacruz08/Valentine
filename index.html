@@ -116,10 +116,11 @@
           <h1>Surprise! 🫶</h1>
           <h2>Will you be my Valentine? 💘</h2>
 
-          <!-- VALENTINE PICTURE -->
+          <!-- IMAGE INTEGRATION -->
           <img src="images/valentine.jpg" 
                alt="Valentine Surprise" 
-               style="width:80%; margin-top:1rem; border-radius:12px;" />
+               style="width:80%; margin-top:1rem; border-radius:12px;"
+               onerror="this.style.display='none'; console.error('Image not found!');" />
 
           <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
             <button id="yesBtn">Yes 💖</button>
