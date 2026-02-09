@@ -38,7 +38,7 @@ h2 { margin:0.5rem 0; color:#e63946; }
 
 img {
   max-width: 90%;
-  max-height: 50vh;
+  max-height: 60vh;
   object-fit: contain;
   border-radius: 12px;
   margin: 1rem 0;
@@ -50,7 +50,6 @@ img {
   gap: 1rem;
   margin-top: 1rem;
   width: 100%;
-  position: relative;
 }
 
 button {
@@ -67,10 +66,10 @@ button {
 button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
-  position: fixed; /* allow free movement */
-  transition: left 0.2s ease, top 0.2s ease;
+  position: relative; /* starts aligned with Yes */
   background: #ccc;
   color: #333;
+  transition: left 0.3s ease, top 0.3s ease;
 }
 
 .hearts {
@@ -90,7 +89,7 @@ button:hover { transform: scale(1.05); background: #e63946; }
 <body>
 
 <div class="card" id="firstPage">
-  <h1>Yalo</h1>
+  <h1>Heyo</h1>
   <p>I wanted to show you something.</p>
   <p>Click below when you're ready 👀</p>
   <button id="revealBtn">Continue</button>
@@ -107,7 +106,7 @@ revealBtn.addEventListener("click", () => {
   card.className = "card";
 
   const title = document.createElement("h1");
-  title.textContent = "Hi Jeanne, my love 🫶";
+  title.textContent = "Hi Jeanne, my love 🫶"; 
 
   const subtitle = document.createElement("h2");
   subtitle.textContent = "Will you be my Valentine? 💘";
@@ -116,7 +115,7 @@ revealBtn.addEventListener("click", () => {
   img.src = "images/picture.jpg";
   img.alt = "Valentine Surprise";
 
-  // Button container
+  // Buttons
   const btnContainer = document.createElement("div");
   btnContainer.className = "btn-container";
 
@@ -163,31 +162,19 @@ revealBtn.addEventListener("click", () => {
     setTimeout(()=>heart.remove(),6000);
   },500);
 
-  // Smooth chasing NO button across the whole screen
-  noBtn.addEventListener("mouseover", (event)=>{
-      const btnWidth = noBtn.offsetWidth;
-      const btnHeight = noBtn.offsetHeight;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+  // NO button chasing logic
+  const chaseNoButton = () => {
+    noBtn.style.position = "fixed"; // switch to free movement
+    const vw = window.innerWidth - noBtn.offsetWidth;
+    const vh = window.innerHeight - noBtn.offsetHeight;
+    let newX = Math.random() * vw;
+    let newY = Math.random() * vh;
+    noBtn.style.left = newX + "px";
+    noBtn.style.top = newY + "px";
+  };
 
-      let newX = Math.random() * (vw - btnWidth);
-      let newY = Math.random() * (vh - btnHeight);
-
-      noBtn.style.left = newX + "px";
-      noBtn.style.top = newY + "px";
-  });
-  noBtn.addEventListener("touchstart", ()=>{
-      const btnWidth = noBtn.offsetWidth;
-      const btnHeight = noBtn.offsetHeight;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
-
-      let newX = Math.random() * (vw - btnWidth);
-      let newY = Math.random() * (vh - btnHeight);
-
-      noBtn.style.left = newX + "px";
-      noBtn.style.top = newY + "px";
-  });
+  noBtn.addEventListener("mouseover", chaseNoButton);
+  noBtn.addEventListener("touchstart", chaseNoButton);
 
   // YES button click
   yesBtn.addEventListener("click", ()=>{
@@ -211,7 +198,6 @@ revealBtn.addEventListener("click", () => {
       setTimeout(()=>heart.remove(),6000);
     },300);
   });
-
 });
 </script>
 
