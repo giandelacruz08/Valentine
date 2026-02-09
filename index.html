@@ -67,10 +67,8 @@ button {
 button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
-  position: absolute;
-  left: 120px; /* initial alignment next to YES */
-  top: 0;
-  transition: left 0.4s ease, top 0.4s ease;
+  position: fixed; /* allow free movement */
+  transition: left 0.2s ease, top 0.2s ease;
   background: #ccc;
   color: #333;
 }
@@ -92,7 +90,7 @@ button:hover { transform: scale(1.05); background: #e63946; }
 <body>
 
 <div class="card" id="firstPage">
-  <h1>Hey</h1>
+  <h1>Yalo</h1>
   <p>I wanted to show you something.</p>
   <p>Click below when you're ready 👀</p>
   <button id="revealBtn">Continue</button>
@@ -100,7 +98,6 @@ button:hover { transform: scale(1.05); background: #e63946; }
 
 <script>
 const revealBtn = document.getElementById("revealBtn");
-let bgMusic; // music persists
 
 revealBtn.addEventListener("click", () => {
   document.body.innerHTML = "";
@@ -119,6 +116,7 @@ revealBtn.addEventListener("click", () => {
   img.src = "images/picture.jpg";
   img.alt = "Valentine Surprise";
 
+  // Button container
   const btnContainer = document.createElement("div");
   btnContainer.className = "btn-container";
 
@@ -133,26 +131,25 @@ revealBtn.addEventListener("click", () => {
   btnContainer.appendChild(yesBtn);
   btnContainer.appendChild(noBtn);
 
+  const audio = document.createElement("audio");
+  audio.id = "bgMusic";
+  audio.loop = true;
+  const src = document.createElement("source");
+  src.src = "audio/audiounchained-melody.mp3";
+  src.type = "audio/mpeg";
+  audio.appendChild(src);
+
   card.appendChild(title);
   card.appendChild(subtitle);
   card.appendChild(img);
   card.appendChild(btnContainer);
+  card.appendChild(audio);
   document.body.appendChild(card);
 
-  // Audio loop
-  if(!bgMusic){
-    bgMusic = document.createElement("audio");
-    bgMusic.id = "bgMusic";
-    bgMusic.loop = true;
-    bgMusic.volume = 0.6;
-    const src = document.createElement("source");
-    src.src = "audio/audiounchained-melody.mp3";
-    src.type = "audio/mpeg";
-    bgMusic.appendChild(src);
-    document.body.appendChild(bgMusic);
-    const playAudio = () => { bgMusic.play().catch(()=>{}); document.body.removeEventListener('click', playAudio); };
-    document.body.addEventListener('click', playAudio);
-  }
+  // Play audio on first click
+  audio.volume = 0.6;
+  const playAudio = () => { audio.play().catch(()=>{}); document.body.removeEventListener('click', playAudio); };
+  document.body.addEventListener('click', playAudio);
 
   // Floating hearts
   const emojis = ["🫶","💖","💕","💘","🥰","😍"];
@@ -166,26 +163,35 @@ revealBtn.addEventListener("click", () => {
     setTimeout(()=>heart.remove(),6000);
   },500);
 
-  // NO button chasing - random jumps (working version)
-  const moveNoButton = () => {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const bw = noBtn.offsetWidth;
-    const bh = noBtn.offsetHeight;
+  // Smooth chasing NO button across the whole screen
+  noBtn.addEventListener("mouseover", (event)=>{
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-    noBtn.style.transition = `${Math.random()*0.3 + 0.3}s ease left, ${Math.random()*0.3 + 0.3}s ease top`;
-    noBtn.style.left = Math.random()*(vw-bw) + "px";
-    noBtn.style.top = Math.random()*(vh-bh) + "px";
-  };
+      let newX = Math.random() * (vw - btnWidth);
+      let newY = Math.random() * (vh - btnHeight);
 
-  setTimeout(()=>{
-    noBtn.addEventListener("mouseover", moveNoButton);
-    noBtn.addEventListener("touchstart", moveNoButton);
-  },700);
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
+  });
+  noBtn.addEventListener("touchstart", ()=>{
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let newX = Math.random() * (vw - btnWidth);
+      let newY = Math.random() * (vh - btnHeight);
+
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
+  });
 
   // YES button click
   yesBtn.addEventListener("click", ()=>{
-    bgMusic.pause();
+    audio.pause();
     document.body.innerHTML = `
       <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; color:white; font-family:'Segoe UI', sans-serif; animation: fadeIn 1s ease;">
         <h1 style="font-size:3rem;">YAY!!! 🫶💕💖</h1>
