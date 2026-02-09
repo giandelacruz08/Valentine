@@ -70,8 +70,6 @@
       background: #ccc;
       color: #333;
       border-radius: 30px;
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
     }
 
     .hearts {
@@ -98,8 +96,8 @@
 
 <body>
 
-  <!-- FIRST PAGE: SUBTLE -->
-  <div class="card" id="intro">
+  <!-- FIRST PAGE -->
+  <div class="card">
     <h1>Hey</h1>
     <p>I wanted to show you something.</p>
     <p>Click below when you're ready 👀</p>
@@ -110,50 +108,51 @@
     const revealBtn = document.getElementById("revealBtn");
 
     revealBtn.addEventListener("click", () => {
-      // SECOND PAGE: VALENTINE + GRADIENT + YOUTUBE SONG
-      document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
+
+      // SECOND PAGE
+      document.body.style.background =
+        "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
+
       document.body.innerHTML = `
         <div class="card">
           <h1>Surprise! 🫶</h1>
           <h2>Will you be my Valentine? 💘</h2>
+
           <div style="margin-top: 2rem;">
             <button id="yesBtn">Yes 💖</button>
             <button id="noBtn">No 😅</button>
           </div>
-          <!-- YouTube song embed -->
-          <iframe id="valentineSong" 
-            width="0" height="0"
-            src="https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&loop=1&playlist=YOUR_VIDEO_ID&controls=0&mute=0" 
-            title="Valentine Song" 
-            frameborder="0" 
-            allow="autoplay; encrypted-media" 
-            allowfullscreen>
-          </iframe>
+
+          <audio id="bgMusic" loop>
+            <source src="audio/unchained-melody.mp3" type="audio/mpeg">
+          </audio>
         </div>
       `;
+
+      // 🎵 Start music
+      const music = document.getElementById("bgMusic");
+      music.volume = 0.6;
+      music.play().catch(() => {});
 
       const yesBtn = document.getElementById("yesBtn");
       const noBtn = document.getElementById("noBtn");
 
-      // NO button chasing logic
-      let chasing = false;
-
-      noBtn.addEventListener("mouseover", () => { chasing = true; moveNoButton(); });
-      noBtn.addEventListener("touchstart", () => { chasing = true; moveNoButton(); });
+      // NO button runs away
+      noBtn.addEventListener("mouseover", moveNoButton);
+      noBtn.addEventListener("touchstart", moveNoButton);
 
       function moveNoButton() {
-        if (!chasing) return;
         const vw = window.innerWidth;
         const vh = window.innerHeight;
         const bw = noBtn.offsetWidth;
         const bh = noBtn.offsetHeight;
 
-        noBtn.style.position = "fixed"; // allow free movement
+        noBtn.style.position = "fixed";
         noBtn.style.left = Math.random() * (vw - bw) + "px";
         noBtn.style.top = Math.random() * (vh - bh) + "px";
       }
 
-      // Floating emojis
+      // Floating hearts
       const emojis = ["🫶", "💖", "💕", "💘", "🥰", "😍"];
       setInterval(() => {
         const heart = document.createElement("div");
@@ -165,13 +164,10 @@
         setTimeout(() => heart.remove(), 6000);
       }, 500);
 
-      // YES click -> CELEBRATION
+      // YES = celebration
       yesBtn.addEventListener("click", () => {
-        // Stop YouTube song
-        const song = document.getElementById("valentineSong");
-        if(song) song.remove(); // removes iframe so audio stops
+        if (music) music.pause();
 
-        document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
         document.body.innerHTML = `
           <div style="
             display:flex;
@@ -190,12 +186,12 @@
           </div>
         `;
 
-        const celebrationEmojis = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
+        const celebration = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
         setInterval(() => {
           const heart = document.createElement("div");
           heart.className = "hearts";
           heart.style.fontSize = Math.random()*24 + 24 + "px";
-          heart.innerText = celebrationEmojis[Math.floor(Math.random()*celebrationEmojis.length)];
+          heart.innerText = celebration[Math.floor(Math.random()*celebration.length)];
           heart.style.left = Math.random() * 100 + "vw";
           heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
           document.body.appendChild(heart);
@@ -207,3 +203,4 @@
 
 </body>
 </html>
+
