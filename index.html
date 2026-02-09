@@ -95,8 +95,22 @@ button:hover { transform: scale(1.05); background: #e63946; }
   <button id="revealBtn">Continue</button>
 </div>
 
+<!-- Audio element created at start -->
+<audio id="bgMusic" loop>
+  <source src="audio/audiounchained-melody.mp3" type="audio/mpeg">
+</audio>
+
 <script>
 const revealBtn = document.getElementById("revealBtn");
+const audio = document.getElementById("bgMusic");
+audio.volume = 0.6;
+
+// Play audio on first interaction (required by browsers)
+const playAudioOnInteraction = () => {
+  audio.play().catch(()=>{});
+  document.body.removeEventListener('click', playAudioOnInteraction);
+};
+document.body.addEventListener('click', playAudioOnInteraction);
 
 revealBtn.addEventListener("click", () => {
   document.body.innerHTML = "";
@@ -130,25 +144,11 @@ revealBtn.addEventListener("click", () => {
   btnContainer.appendChild(yesBtn);
   btnContainer.appendChild(noBtn);
 
-  const audio = document.createElement("audio");
-  audio.id = "bgMusic";
-  audio.loop = true;
-  const src = document.createElement("source");
-  src.src = "audio/audiounchained-melody.mp3";
-  src.type = "audio/mpeg";
-  audio.appendChild(src);
-
   card.appendChild(title);
   card.appendChild(subtitle);
   card.appendChild(img);
   card.appendChild(btnContainer);
-  card.appendChild(audio);
   document.body.appendChild(card);
-
-  // Play audio on first click
-  audio.volume = 0.6;
-  const playAudio = () => { audio.play().catch(()=>{}); document.body.removeEventListener('click', playAudio); };
-  document.body.addEventListener('click', playAudio);
 
   // Floating hearts
   const emojis = ["🫶","💖","💕","💘","🥰","😍"];
@@ -164,7 +164,7 @@ revealBtn.addEventListener("click", () => {
 
   // NO button chasing logic
   const chaseNoButton = () => {
-    noBtn.style.position = "fixed"; // switch to free movement
+    noBtn.style.position = "fixed"; // free movement
     const vw = window.innerWidth - noBtn.offsetWidth;
     const vh = window.innerHeight - noBtn.offsetHeight;
     let newX = Math.random() * vw;
@@ -172,13 +172,12 @@ revealBtn.addEventListener("click", () => {
     noBtn.style.left = newX + "px";
     noBtn.style.top = newY + "px";
   };
-
   noBtn.addEventListener("mouseover", chaseNoButton);
   noBtn.addEventListener("touchstart", chaseNoButton);
 
   // YES button click
   yesBtn.addEventListener("click", ()=>{
-    audio.pause();
+    audio.pause(); // stop music here if you want
     document.body.innerHTML = `
       <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; color:white; font-family:'Segoe UI', sans-serif; animation: fadeIn 1s ease;">
         <h1 style="font-size:3rem;">YAY!!! 🫶💕💖</h1>
