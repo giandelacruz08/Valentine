@@ -53,6 +53,7 @@
       color: #333;
       border-radius: 30px;
       transition: left 0.4s ease, top 0.4s ease;
+      position: fixed;
     }
 
     .hearts {
@@ -85,15 +86,14 @@
 
     revealBtn.addEventListener("click", () => {
 
-      // SECOND PAGE
+      // Clear first page and change background
+      document.body.innerHTML = "";
       document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
-      document.body.innerHTML = ""; // clear first page
 
       // Create card
       const card = document.createElement("div");
       card.className = "card";
 
-      // Title and subtitle
       const title = document.createElement("h1");
       title.textContent = "Surprise! 🫶";
       card.appendChild(title);
@@ -102,17 +102,17 @@
       subtitle.textContent = "Will you be my Valentine? 💘";
       card.appendChild(subtitle);
 
-      // IMAGE (iPhone screenshot-friendly)
+      // IMAGE - iPhone screenshot friendly
       const img = document.createElement("img");
-      img.src = "images/picture.jpg"; 
+      img.src = "images/picture.jpg";
       img.alt = "Valentine Surprise";
-      img.style.width = "100%";
-      img.style.maxWidth = "250px";   // fits nicely in card
-      img.style.maxHeight = "400px";  // prevents very tall screenshots from overflowing
-      img.style.height = "auto";
-      img.style.objectFit = "contain"; 
-      img.style.marginTop = "1rem";
+      img.style.width = "auto";
+      img.style.maxWidth = "90vw";
+      img.style.maxHeight = "60vh";
+      img.style.display = "block";
+      img.style.margin = "1rem auto";
       img.style.borderRadius = "12px";
+      img.style.objectFit = "contain";
       img.onerror = () => { img.style.display = "none"; console.error("Image not found!"); };
       card.appendChild(img);
 
@@ -131,47 +131,45 @@
       const noBtn = document.createElement("button");
       noBtn.id = "noBtn";
       noBtn.textContent = "No 😅";
-      noBtn.style.position = "fixed";
-      noBtn.style.transition = "left 0.4s ease, top 0.4s ease";
       btnContainer.appendChild(noBtn);
 
       card.appendChild(btnContainer);
 
-      // AUDIO (play safely)
+      // AUDIO
       const audio = document.createElement("audio");
-      audio.id = "bgMusic";
       audio.loop = true;
       const source = document.createElement("source");
       source.src = "audio/audiounchained-melody.mp3";
       source.type = "audio/mpeg";
       audio.appendChild(source);
       card.appendChild(audio);
+
       document.body.appendChild(card);
 
+      // Play audio safely
       audio.volume = 0.6;
-      audio.play().catch(() => console.log("Autoplay blocked, click anywhere to start music."));
-      document.body.addEventListener("click", function startAudio() {
-        audio.play().catch(() => {});
-        document.body.removeEventListener("click", startAudio);
+      audio.play().catch(() => {
+        document.body.addEventListener("click", function startAudio() {
+          audio.play().catch(()=>{});
+          document.body.removeEventListener("click", startAudio);
+        });
       });
 
-      // Floating hearts animation
-      const emojis = ["🫶", "💖", "💕", "💘", "🥰", "😍"];
+      // Floating hearts
+      const emojis = ["🫶","💖","💕","💘","🥰","😍"];
       setInterval(() => {
         const heart = document.createElement("div");
         heart.className = "hearts";
-        heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        heart.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+        heart.style.left = Math.random()*100 + "vw";
+        heart.style.animationDuration = (Math.random()*3 + 4) + "s";
         document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
+        setTimeout(()=>heart.remove(), 6000);
       }, 500);
 
-      // Smooth NO button logic
-      setTimeout(() => {
-        noBtn.addEventListener("mouseover", moveNoButton);
-        noBtn.addEventListener("touchstart", moveNoButton);
-      }, 700);
+      // Smooth NO button
+      noBtn.addEventListener("mouseover", moveNoButton);
+      noBtn.addEventListener("touchstart", moveNoButton);
 
       function moveNoButton() {
         const vw = window.innerWidth;
@@ -179,14 +177,13 @@
         const bw = noBtn.offsetWidth;
         const bh = noBtn.offsetHeight;
         noBtn.style.transition = `${Math.random()*0.3 + 0.3}s ease left, ${Math.random()*0.3 + 0.3}s ease top`;
-        noBtn.style.left = Math.random() * (vw - bw) + "px";
-        noBtn.style.top = Math.random() * (vh - bh) + "px";
+        noBtn.style.left = Math.random()*(vw-bw) + "px";
+        noBtn.style.top = Math.random()*(vh-bh) + "px";
       }
 
       // YES button click = celebration
       yesBtn.addEventListener("click", () => {
         audio.pause();
-
         document.body.innerHTML = `
           <div style="
             display:flex;
@@ -204,18 +201,17 @@
             <p style="font-size:1.1rem;">Happy Valentine’s Day 💘</p>
           </div>
         `;
-
         const celebration = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
-        setInterval(() => {
+        setInterval(()=>{
           const heart = document.createElement("div");
-          heart.className = "hearts";
-          heart.style.fontSize = Math.random()*24 + 24 + "px";
+          heart.className="hearts";
+          heart.style.fontSize = Math.random()*24+24+"px";
           heart.innerText = celebration[Math.floor(Math.random()*celebration.length)];
-          heart.style.left = Math.random() * 100 + "vw";
-          heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+          heart.style.left = Math.random()*100+"vw";
+          heart.style.animationDuration = (Math.random()*3+3)+"s";
           document.body.appendChild(heart);
-          setTimeout(() => heart.remove(), 6000);
-        }, 300);
+          setTimeout(()=>heart.remove(),6000);
+        },300);
       });
 
     });
