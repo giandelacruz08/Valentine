@@ -68,9 +68,9 @@ button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
   position: absolute;
-  left: 120px; /* aligned initially next to YES */
+  left: 120px; /* initial alignment next to YES */
   top: 0;
-  transition: left 0.3s ease, top 0.3s ease;
+  transition: left 0.4s ease, top 0.4s ease;
   background: #ccc;
   color: #333;
 }
@@ -100,7 +100,7 @@ button:hover { transform: scale(1.05); background: #e63946; }
 
 <script>
 const revealBtn = document.getElementById("revealBtn");
-let bgMusic; // global so it persists across pages
+let bgMusic; // music persists
 
 revealBtn.addEventListener("click", () => {
   document.body.innerHTML = "";
@@ -110,7 +110,7 @@ revealBtn.addEventListener("click", () => {
   card.className = "card";
 
   const title = document.createElement("h1");
-  title.textContent = "Hi Jeanne, my love 🫶"; 
+  title.textContent = "Hi Jeanne, my love 🫶";
 
   const subtitle = document.createElement("h2");
   subtitle.textContent = "Will you be my Valentine? 💘";
@@ -119,7 +119,6 @@ revealBtn.addEventListener("click", () => {
   img.src = "images/picture.jpg";
   img.alt = "Valentine Surprise";
 
-  // Button container
   const btnContainer = document.createElement("div");
   btnContainer.className = "btn-container";
 
@@ -140,7 +139,7 @@ revealBtn.addEventListener("click", () => {
   card.appendChild(btnContainer);
   document.body.appendChild(card);
 
-  // AUDIO: play continuously until third page
+  // Audio loop
   if(!bgMusic){
     bgMusic = document.createElement("audio");
     bgMusic.id = "bgMusic";
@@ -151,7 +150,6 @@ revealBtn.addEventListener("click", () => {
     src.type = "audio/mpeg";
     bgMusic.appendChild(src);
     document.body.appendChild(bgMusic);
-
     const playAudio = () => { bgMusic.play().catch(()=>{}); document.body.removeEventListener('click', playAudio); };
     document.body.addEventListener('click', playAudio);
   }
@@ -168,33 +166,26 @@ revealBtn.addEventListener("click", () => {
     setTimeout(()=>heart.remove(),6000);
   },500);
 
-  // NO button chasing (runs away from cursor)
-  const moveNoButton = (e)=>{
+  // NO button chasing - random jumps (working version)
+  const moveNoButton = () => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const bw = noBtn.offsetWidth;
     const bh = noBtn.offsetHeight;
-    const cursorX = e.clientX;
-    const cursorY = e.clientY;
 
-    // Calculate new position away from cursor
-    const offset = 100; // distance to move
-    let newLeft = noBtn.offsetLeft + (noBtn.offsetLeft < cursorX ? -offset : offset);
-    let newTop = noBtn.offsetTop + (noBtn.offsetTop < cursorY ? -offset : offset);
-
-    // Keep within screen
-    newLeft = Math.max(0, Math.min(vw-bw, newLeft));
-    newTop = Math.max(0, Math.min(vh-bh, newTop));
-
-    noBtn.style.left = newLeft + "px";
-    noBtn.style.top = newTop + "px";
+    noBtn.style.transition = `${Math.random()*0.3 + 0.3}s ease left, ${Math.random()*0.3 + 0.3}s ease top`;
+    noBtn.style.left = Math.random()*(vw-bw) + "px";
+    noBtn.style.top = Math.random()*(vh-bh) + "px";
   };
 
-  noBtn.addEventListener("mousemove", moveNoButton);
-  noBtn.addEventListener("touchmove", moveNoButton);
+  setTimeout(()=>{
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("touchstart", moveNoButton);
+  },700);
 
-  // YES button click = third page celebration
+  // YES button click
   yesBtn.addEventListener("click", ()=>{
+    bgMusic.pause();
     document.body.innerHTML = `
       <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; color:white; font-family:'Segoe UI', sans-serif; animation: fadeIn 1s ease;">
         <h1 style="font-size:3rem;">YAY!!! 🫶💕💖</h1>
