@@ -106,10 +106,10 @@ const audio = document.getElementById("bgMusic");
 audio.volume = 0.6;
 
 revealBtn.addEventListener("click", () => {
-  // Play music once
-  audio.play().catch(()=>{});
+  // ✅ Music plays immediately on Continue click before DOM changes
+  audio.play().catch(() => {});
 
-  // Remove only the first card, keep audio
+  // Remove first card only
   const firstCard = document.getElementById("firstPage");
   firstCard.remove();
 
@@ -173,7 +173,7 @@ revealBtn.addEventListener("click", () => {
   noBtn.addEventListener("touchstart", chaseNoButton);
 
   yesBtn.addEventListener("click", ()=>{
-    audio.pause(); // stop music if you want
+    audio.pause(); // stop music if desired
     document.body.innerHTML = "";
     document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4)";
 
