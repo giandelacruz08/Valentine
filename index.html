@@ -50,7 +50,7 @@ img {
   gap: 1rem;
   margin-top: 1rem;
   width: 100%;
-  position: relative;
+  position: relative; /* relative container for NO button */
 }
 
 button {
@@ -68,9 +68,11 @@ button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
   position: absolute;
+  left: 120px; /* initial position next to Yes button */
+  top: 0;
+  transition: left 0.3s ease, top 0.3s ease;
   background: #ccc;
   color: #333;
-  transition: left 0.1s ease, top 0.1s ease;
 }
 
 .hearts {
@@ -90,7 +92,7 @@ button:hover { transform: scale(1.05); background: #e63946; }
 <body>
 
 <div class="card" id="firstPage">
-  <h1>Hi!</h1>
+  <h1>Hello</h1>
   <p>I wanted to show you something.</p>
   <p>Click below when you're ready 👀</p>
   <button id="revealBtn">Continue</button>
@@ -126,8 +128,6 @@ revealBtn.addEventListener("click", () => {
   const noBtn = document.createElement("button");
   noBtn.textContent = "No 😅";
   noBtn.id = "noBtn";
-  noBtn.style.left = "120px";
-  noBtn.style.top = "0px";
 
   btnContainer.appendChild(yesBtn);
   btnContainer.appendChild(noBtn);
@@ -164,24 +164,26 @@ revealBtn.addEventListener("click", () => {
     setTimeout(()=>heart.remove(),6000);
   },500);
 
-  // NO button chasing cursor
-  const chaseNoButton = (e) => {
-    const rect = noBtn.getBoundingClientRect();
-    const dx = e.clientX - (rect.left + rect.width/2);
-    const dy = e.clientY - (rect.top + rect.height/2);
-    const distance = Math.sqrt(dx*dx + dy*dy);
-    const speed = Math.min(20, 200/distance); // farther = slower, closer = faster
-    let newX = rect.left - dx*speed/10;
-    let newY = rect.top - dy*speed/10;
-    // keep inside window
-    newX = Math.max(0, Math.min(newX, window.innerWidth - rect.width));
-    newY = Math.max(0, Math.min(newY, window.innerHeight - rect.height));
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
+  // Smooth chasing NO button
+  const moveNoButton = (event) => {
+    const noBtnRect = noBtn.getBoundingClientRect();
+    const cursorX = event.clientX;
+    const cursorY = event.clientY;
+
+    // Move NO button relative to the cursor
+    const offsetX = cursorX - noBtnRect.width / 2;
+    const offsetY = cursorY - noBtnRect.height / 2;
+
+    // Ensure the button stays within bounds of the screen
+    const maxX = window.innerWidth - noBtnRect.width;
+    const maxY = window.innerHeight - noBtnRect.height;
+
+    noBtn.style.left = `${Math.min(Math.max(offsetX, 0), maxX)}px`;
+    noBtn.style.top = `${Math.min(Math.max(offsetY, 0), maxY)}px`;
   };
 
-  document.addEventListener("mousemove", chaseNoButton);
-  document.addEventListener("touchmove", (e)=>chaseNoButton(e.touches[0]));
+  // Attach mousemove event listener for chasing effect
+  document.body.addEventListener("mousemove", moveNoButton);
 
   // YES button click
   yesBtn.addEventListener("click", ()=>{
