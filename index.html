@@ -102,11 +102,15 @@
       subtitle.textContent = "Will you be my Valentine? 💘";
       card.appendChild(subtitle);
 
-      // IMAGE
+      // IMAGE (iPhone screenshot-friendly)
       const img = document.createElement("img");
-      img.src = "images/picture.jpg"; // <-- renamed here
+      img.src = "images/picture.jpg"; 
       img.alt = "Valentine Surprise";
-      img.style.width = "80%";
+      img.style.width = "100%";
+      img.style.maxWidth = "250px";   // fits nicely in card
+      img.style.maxHeight = "400px";  // prevents very tall screenshots from overflowing
+      img.style.height = "auto";
+      img.style.objectFit = "contain"; 
       img.style.marginTop = "1rem";
       img.style.borderRadius = "12px";
       img.onerror = () => { img.style.display = "none"; console.error("Image not found!"); };
@@ -133,7 +137,7 @@
 
       card.appendChild(btnContainer);
 
-      // AUDIO
+      // AUDIO (play safely)
       const audio = document.createElement("audio");
       audio.id = "bgMusic";
       audio.loop = true;
@@ -142,12 +146,14 @@
       source.type = "audio/mpeg";
       audio.appendChild(source);
       card.appendChild(audio);
-
       document.body.appendChild(card);
 
-      // Play music
       audio.volume = 0.6;
-      audio.play().catch(() => {});
+      audio.play().catch(() => console.log("Autoplay blocked, click anywhere to start music."));
+      document.body.addEventListener("click", function startAudio() {
+        audio.play().catch(() => {});
+        document.body.removeEventListener("click", startAudio);
+      });
 
       // Floating hearts animation
       const emojis = ["🫶", "💖", "💕", "💘", "🥰", "😍"];
@@ -172,7 +178,6 @@
         const vh = window.innerHeight;
         const bw = noBtn.offsetWidth;
         const bh = noBtn.offsetHeight;
-
         noBtn.style.transition = `${Math.random()*0.3 + 0.3}s ease left, ${Math.random()*0.3 + 0.3}s ease top`;
         noBtn.style.left = Math.random() * (vw - bw) + "px";
         noBtn.style.top = Math.random() * (vh - bh) + "px";
