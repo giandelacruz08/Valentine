@@ -50,7 +50,7 @@ img {
   gap: 1rem;
   margin-top: 1rem;
   width: 100%;
-  position: relative; /* relative container for NO button */
+  position: relative;
 }
 
 button {
@@ -67,10 +67,8 @@ button {
 button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
-  position: absolute;
-  left: 120px; /* initial position next to Yes button */
-  top: 0;
-  transition: left 0.3s ease, top 0.3s ease;
+  position: fixed; /* allow free movement */
+  transition: left 0.2s ease, top 0.2s ease;
   background: #ccc;
   color: #333;
 }
@@ -92,7 +90,7 @@ button:hover { transform: scale(1.05); background: #e63946; }
 <body>
 
 <div class="card" id="firstPage">
-  <h1>Hello</h1>
+  <h1>Yalo</h1>
   <p>I wanted to show you something.</p>
   <p>Click below when you're ready 👀</p>
   <button id="revealBtn">Continue</button>
@@ -109,7 +107,8 @@ revealBtn.addEventListener("click", () => {
   card.className = "card";
 
   const title = document.createElement("h1");
-  title.textContent = "Hi Jeanne, my love 🫶"; 
+  title.textContent = "Hi Jeanne, my love 🫶";
+
   const subtitle = document.createElement("h2");
   subtitle.textContent = "Will you be my Valentine? 💘";
 
@@ -164,26 +163,31 @@ revealBtn.addEventListener("click", () => {
     setTimeout(()=>heart.remove(),6000);
   },500);
 
-  // Smooth chasing NO button
-  const moveNoButton = (event) => {
-    const noBtnRect = noBtn.getBoundingClientRect();
-    const cursorX = event.clientX;
-    const cursorY = event.clientY;
+  // Smooth chasing NO button across the whole screen
+  noBtn.addEventListener("mouseover", (event)=>{
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-    // Move NO button relative to the cursor
-    const offsetX = cursorX - noBtnRect.width / 2;
-    const offsetY = cursorY - noBtnRect.height / 2;
+      let newX = Math.random() * (vw - btnWidth);
+      let newY = Math.random() * (vh - btnHeight);
 
-    // Ensure the button stays within bounds of the screen
-    const maxX = window.innerWidth - noBtnRect.width;
-    const maxY = window.innerHeight - noBtnRect.height;
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
+  });
+  noBtn.addEventListener("touchstart", ()=>{
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
 
-    noBtn.style.left = `${Math.min(Math.max(offsetX, 0), maxX)}px`;
-    noBtn.style.top = `${Math.min(Math.max(offsetY, 0), maxY)}px`;
-  };
+      let newX = Math.random() * (vw - btnWidth);
+      let newY = Math.random() * (vh - btnHeight);
 
-  // Attach mousemove event listener for chasing effect
-  document.body.addEventListener("mousemove", moveNoButton);
+      noBtn.style.left = newX + "px";
+      noBtn.style.top = newY + "px";
+  });
 
   // YES button click
   yesBtn.addEventListener("click", ()=>{
@@ -207,6 +211,7 @@ revealBtn.addEventListener("click", () => {
       setTimeout(()=>heart.remove(),6000);
     },300);
   });
+
 });
 </script>
 
