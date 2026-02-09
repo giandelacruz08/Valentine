@@ -67,6 +67,7 @@
       background: #ccc;
       color: #333;
       border-radius: 30px;
+      transition: left 0.4s ease, top 0.4s ease; /* Smooth movement */
     }
 
     .hearts {
@@ -147,6 +148,8 @@
         const bh = noBtn.offsetHeight;
 
         noBtn.style.position = "fixed";
+        // Randomize transition speed a bit for natural feel
+        noBtn.style.transition = `${Math.random()*0.3 + 0.3}s ease left, ${Math.random()*0.3 + 0.3}s ease top`;
         noBtn.style.left = Math.random() * (vw - bw) + "px";
         noBtn.style.top = Math.random() * (vh - bh) + "px";
       }
