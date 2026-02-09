@@ -36,18 +36,12 @@ body {
 h1 { margin:0.5rem 0; color:#333; }
 h2 { margin:0.5rem 0; color:#e63946; }
 
-.img-container {
-  width: 300px;  /* fit to card width */
-  height: calc(300px * 1266 / 918); /* maintain aspect ratio */
-  overflow: hidden;
+img {
+  max-width: 90%;
+  max-height: 50vh;
+  object-fit: contain;
   border-radius: 12px;
   margin: 1rem 0;
-}
-
-.img-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .btn-container {
@@ -55,8 +49,8 @@ h2 { margin:0.5rem 0; color:#e63946; }
   justify-content: center;
   gap: 1rem;
   margin-top: 1rem;
-  position: relative;
   width: 100%;
+  position: relative;
 }
 
 button {
@@ -73,9 +67,10 @@ button {
 button:hover { transform: scale(1.05); background: #e63946; }
 
 #noBtn {
+  position: absolute;
   background: #ccc;
   color: #333;
-  position: relative;
+  transition: left 0.1s ease, top 0.1s ease;
 }
 
 .hearts {
@@ -95,7 +90,7 @@ button:hover { transform: scale(1.05); background: #e63946; }
 <body>
 
 <div class="card" id="firstPage">
-  <h1>Hello</h1>
+  <h1>Hi!</h1>
   <p>I wanted to show you something.</p>
   <p>Click below when you're ready 👀</p>
   <button id="revealBtn">Continue</button>
@@ -116,14 +111,11 @@ revealBtn.addEventListener("click", () => {
   const subtitle = document.createElement("h2");
   subtitle.textContent = "Will you be my Valentine? 💘";
 
-  const imgContainer = document.createElement("div");
-  imgContainer.className = "img-container";
   const img = document.createElement("img");
   img.src = "images/picture.jpg";
   img.alt = "Valentine Surprise";
-  imgContainer.appendChild(img);
 
-  // Buttons container
+  // Button container
   const btnContainer = document.createElement("div");
   btnContainer.className = "btn-container";
 
@@ -134,11 +126,12 @@ revealBtn.addEventListener("click", () => {
   const noBtn = document.createElement("button");
   noBtn.textContent = "No 😅";
   noBtn.id = "noBtn";
+  noBtn.style.left = "120px";
+  noBtn.style.top = "0px";
 
   btnContainer.appendChild(yesBtn);
   btnContainer.appendChild(noBtn);
 
-  // Audio
   const audio = document.createElement("audio");
   audio.id = "bgMusic";
   audio.loop = true;
@@ -149,7 +142,7 @@ revealBtn.addEventListener("click", () => {
 
   card.appendChild(title);
   card.appendChild(subtitle);
-  card.appendChild(imgContainer);
+  card.appendChild(img);
   card.appendChild(btnContainer);
   card.appendChild(audio);
   document.body.appendChild(card);
@@ -171,16 +164,24 @@ revealBtn.addEventListener("click", () => {
     setTimeout(()=>heart.remove(),6000);
   },500);
 
-  // Smooth chasing NO button (relative movement)
-  let noX=0, noY=0;
-  document.addEventListener("mousemove", (e)=>{
+  // NO button chasing cursor
+  const chaseNoButton = (e) => {
     const rect = noBtn.getBoundingClientRect();
-    const distX = e.clientX - (rect.left + rect.width/2);
-    const distY = e.clientY - (rect.top + rect.height/2);
-    noX += distX * 0.1;
-    noY += distY * 0.1;
-    noBtn.style.transform = `translate(${noX}px, ${noY}px)`;
-  });
+    const dx = e.clientX - (rect.left + rect.width/2);
+    const dy = e.clientY - (rect.top + rect.height/2);
+    const distance = Math.sqrt(dx*dx + dy*dy);
+    const speed = Math.min(20, 200/distance); // farther = slower, closer = faster
+    let newX = rect.left - dx*speed/10;
+    let newY = rect.top - dy*speed/10;
+    // keep inside window
+    newX = Math.max(0, Math.min(newX, window.innerWidth - rect.width));
+    newY = Math.max(0, Math.min(newY, window.innerHeight - rect.height));
+    noBtn.style.left = newX + "px";
+    noBtn.style.top = newY + "px";
+  };
+
+  document.addEventListener("mousemove", chaseNoButton);
+  document.addEventListener("touchmove", (e)=>chaseNoButton(e.touches[0]));
 
   // YES button click
   yesBtn.addEventListener("click", ()=>{
