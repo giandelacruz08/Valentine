@@ -105,13 +105,10 @@ const revealBtn = document.getElementById("revealBtn");
 const audio = document.getElementById("bgMusic");
 audio.volume = 0.6;
 
-// Play audio once on first interaction
-document.body.addEventListener('click', function playAudioOnce() {
-  audio.play().catch(()=>{});
-  document.body.removeEventListener('click', playAudioOnce);
-});
-
 revealBtn.addEventListener("click", () => {
+  // Play music once on Continue click
+  audio.play().catch(()=>{});
+
   document.body.innerHTML = "";
   document.body.style.background = "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
 
@@ -173,7 +170,7 @@ revealBtn.addEventListener("click", () => {
   noBtn.addEventListener("touchstart", chaseNoButton);
 
   yesBtn.addEventListener("click", ()=>{
-    audio.pause(); // stop music here if you want
+    audio.pause(); // stop music here if desired
     document.body.innerHTML = "";
     document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4)";
 
@@ -203,18 +200,4 @@ revealBtn.addEventListener("click", () => {
 
     const celebration = ["🫶","💖","💕","💘","🥰","😍","❤️‍🔥"];
     setInterval(()=>{
-      const heart = document.createElement("div");
-      heart.className="hearts";
-      heart.style.fontSize = Math.random()*24+24+"px";
-      heart.innerText = celebration[Math.floor(Math.random()*celebration.length)];
-      heart.style.left = Math.random()*100+"vw";
-      heart.style.animationDuration = (Math.random()*3+3)+"s";
-      document.body.appendChild(heart);
-      setTimeout(()=>heart.remove(),6000);
-    },300);
-  });
-});
-</script>
-
-</body>
-</html>
+      const heart = document.c
