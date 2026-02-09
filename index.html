@@ -30,21 +30,9 @@
       z-index: 1;
     }
 
-    h1 {
-      color: #333;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-    }
-
-    h2 {
-      color: #e63946;
-      margin-top: 1rem;
-    }
-
-    p {
-      color: #555;
-      font-size: 1rem;
-    }
+    h1 { color: #333; margin-bottom: 0.5rem; font-weight: 500; }
+    h2 { color: #e63946; margin-top: 1rem; }
+    p { color: #555; font-size: 1rem; }
 
     button {
       margin-top: 1rem;
@@ -58,10 +46,7 @@
       transition: transform 0.2s ease, background 0.2s ease;
     }
 
-    button:hover {
-      transform: scale(1.05);
-      background: #e63946;
-    }
+    button:hover { transform: scale(1.05); background: #e63946; }
 
     #noBtn {
       background: #ccc;
@@ -80,15 +65,8 @@
       z-index: 0;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes floatUp {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(-120vh); opacity: 0; }
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes floatUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-120vh); opacity: 0; } }
   </style>
 </head>
 
@@ -126,7 +104,7 @@
 
       // IMAGE
       const img = document.createElement("img");
-      img.src = "images/valentine.jpg";
+      img.src = "images/picture.jpg"; // <-- renamed here
       img.alt = "Valentine Surprise";
       img.style.width = "80%";
       img.style.marginTop = "1rem";
