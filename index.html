@@ -67,7 +67,7 @@
       background: #ccc;
       color: #333;
       border-radius: 30px;
-      transition: left 0.4s ease, top 0.4s ease; /* Smooth movement */
+      transition: left 0.4s ease, top 0.4s ease;
     }
 
     .hearts {
@@ -116,13 +116,18 @@
           <h1>Surprise! 🫶</h1>
           <h2>Will you be my Valentine? 💘</h2>
 
+          <!-- VALENTINE PICTURE -->
+          <img src="images/valentine.jpg" 
+               alt="Valentine Surprise" 
+               style="width:80%; margin-top:1rem; border-radius:12px;" />
+
           <div style="margin-top: 2rem; display: flex; justify-content: center; gap: 1rem;">
             <button id="yesBtn">Yes 💖</button>
             <button id="noBtn">No 😅</button>
           </div>
 
           <audio id="bgMusic" loop>
-            <source src="audio/unchained-melody.mp3" type="audio/mpeg">
+            <source src="audio/audiounchained-melody.mp3" type="audio/mpeg">
           </audio>
         </div>
       `;
@@ -135,7 +140,13 @@
       const yesBtn = document.getElementById("yesBtn");
       const noBtn = document.getElementById("noBtn");
 
-      // Delay NO button movement so it doesn't trigger immediately
+      // Set initial position and transition for smooth "No" button movement
+      noBtn.style.position = "fixed";
+      noBtn.style.left = noBtn.offsetLeft + "px";
+      noBtn.style.top = noBtn.offsetTop + "px";
+      noBtn.style.transition = "left 0.4s ease, top 0.4s ease";
+
+      // Delay event listener so it doesn't trigger instantly
       setTimeout(() => {
         noBtn.addEventListener("mouseover", moveNoButton);
         noBtn.addEventListener("touchstart", moveNoButton);
@@ -147,14 +158,14 @@
         const bw = noBtn.offsetWidth;
         const bh = noBtn.offsetHeight;
 
-        noBtn.style.position = "fixed";
-        // Randomize transition speed a bit for natural feel
+        // Random speed for natural feel
         noBtn.style.transition = `${Math.random()*0.3 + 0.3}s ease left, ${Math.random()*0.3 + 0.3}s ease top`;
+
         noBtn.style.left = Math.random() * (vw - bw) + "px";
         noBtn.style.top = Math.random() * (vh - bh) + "px";
       }
 
-      // Floating hearts
+      // Floating hearts animation
       const emojis = ["🫶", "💖", "💕", "💘", "🥰", "😍"];
       setInterval(() => {
         const heart = document.createElement("div");
@@ -166,7 +177,7 @@
         setTimeout(() => heart.remove(), 6000);
       }, 500);
 
-      // YES = celebration
+      // YES button click = celebration
       yesBtn.addEventListener("click", () => {
         if (music) music.pause();
 
