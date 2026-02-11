@@ -1,12 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Surprise</title>
+<style>
+body {
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  background:#f4f4f4;
+  overflow:hidden;
+  flex-direction:column;
+}
+
+.card {
+  background:rgba(255,255,255,0.95);
+  padding:1.5rem;
+  border-radius:16px;
+  text-align:center;
+  width:90%;
+  max-width:400px;
+  max-height:90vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+  overflow:hidden;
+  position:relative;
+}
+
+h1{margin:0.5rem 0;color:#333;}
+h2{margin:0.5rem 0;color:#e63946;}
+img{max-width:90%;max-height:60vh;object-fit:contain;border-radius:12px;margin:1rem 0;}
+
+.btn-container{
+  display:flex;
+  justify-content:center;
+  gap:1rem;
+  margin-top:1rem;
+  width:100%;
+}
+
+button{
+  padding:10px 22px;
+  border:none;
+  border-radius:24px;
+  cursor:pointer;
+  font-size:0.95rem;
+  background:#333;
+  color:#fff;
+  transition:0.2s;
+}
+
+button:hover{transform:scale(1.05);background:#e63946;}
+#noBtn{position:relative;background:#ccc;color:#333;transition:left 0.3s ease, top 0.3s ease;}
+
+.hearts{
+  position:fixed;
+  bottom:-20px;
+  font-size:26px;
+  animation:floatUp 6s linear infinite;
+  opacity:0.85;
+  pointer-events:none;
+  z-index:0;
+}
+
+@keyframes floatUp{
+  from{transform:translateY(0);opacity:1;}
+  to{transform:translateY(-120vh);opacity:0;}
+}
+</style>
+</head>
 <body>
 
-<!-- Audio stays here permanently -->
-<audio id="bgMusic" preload="auto" autoplay>
+<!-- Audio stays here, will never be removed -->
+<audio id="bgMusic" preload="auto">
   <source src="audio/unchained-melody.mp3" type="audio/mpeg">
 </audio>
 
+<!-- Container for all cards -->
 <div id="pageContainer">
-  <!-- First card -->
+  <!-- First Card -->
   <div class="card" id="firstPage">
     <h1>Hi love!</h1>
     <p>I wanted to show you something.</p>
@@ -20,32 +98,34 @@ const audio = document.getElementById("bgMusic");
 audio.volume = 0.6;
 
 const pageContainer = document.getElementById("pageContainer");
+const revealBtn = document.getElementById("revealBtn");
 
-document.getElementById("revealBtn").onclick = function() {
-  audio.play();
+revealBtn.onclick = function() {
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
   showSecondCard();
 };
 
 function showSecondCard() {
   const firstCard = document.getElementById("firstPage");
   firstCard.remove();
+  document.body.style.background="linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
 
   const card = document.createElement("div");
-  card.className = "card";
+  card.className="card";
 
   const title = document.createElement("h1");
-  title.textContent = "Inah, my love 🫶";
+  title.textContent="Inah, my love 🫶";
   const subtitle = document.createElement("h2");
-  subtitle.textContent = "Will you be my Valentine? 💘";
+  subtitle.textContent="Will you be my Valentine? 💘";
   const img = document.createElement("img");
-  img.src = "images/picture.jpg";
+  img.src="images/picture.jpg";
+  img.alt="Valentine Surprise";
 
   const btnContainer = document.createElement("div");
-  btnContainer.className = "btn-container";
-  const yesBtn = document.createElement("button");
-  yesBtn.textContent = "Yurr 💖";
-  const noBtn = document.createElement("button");
-  noBtn.textContent = "Naurr 😝"; noBtn.id = "noBtn";
+  btnContainer.className="btn-container";
+  const yesBtn = document.createElement("button"); yesBtn.textContent="Yurr 💖";
+  const noBtn = document.createElement("button"); noBtn.textContent="Naurr 😝"; noBtn.id="noBtn";
 
   btnContainer.appendChild(yesBtn);
   btnContainer.appendChild(noBtn);
@@ -57,24 +137,38 @@ function showSecondCard() {
 
   pageContainer.appendChild(card);
 
+  // Floating hearts
+  const emojis = ["🫶","💖","💕","💘","🥰","😍"];
+  setInterval(()=>{
+    const heart = document.createElement("div");
+    heart.className="hearts";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.fontSize=Math.random()*24+24+"px";
+    heart.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+    document.body.appendChild(heart);
+    setTimeout(()=>heart.remove(),6000);
+  },500);
+
+  // NO button dodge
   noBtn.onmouseover = noBtn.ontouchstart = function(){
-    noBtn.style.position = "fixed";
+    noBtn.style.position="fixed";
     const vw = window.innerWidth-noBtn.offsetWidth;
     const vh = window.innerHeight-noBtn.offsetHeight;
     noBtn.style.left=Math.random()*vw+"px";
     noBtn.style.top=Math.random()*vh+"px";
   };
 
+  // YES button click
   yesBtn.onclick = function() {
-    // Remove only the current card
+    // Remove only the second card
     card.remove();
+    document.body.style.background="linear-gradient(135deg,#ff758c,#ff7eb3,#fad0c4)";
 
-    // Final card
     const finalCard = document.createElement("div");
-    finalCard.className = "card";
+    finalCard.className="card";
 
-    const t = document.createElement("h1"); t.textContent = "YAY!!! 🫶💕💖";
-    const gif = document.createElement("img"); gif.src = "images/kims.gif"; gif.alt = "Valentine GIF";
+    const t = document.createElement("h1"); t.textContent="YAY!!! 🫶💕💖";
+    const gif = document.createElement("img"); gif.src="images/kims.gif"; gif.alt="Valentine GIF";
 
     const m1 = document.createElement("p"); m1.style.fontSize="1.3rem"; m1.textContent="Happy Valentine's, my love 🥰";
     const m2 = document.createElement("p"); m2.style.fontSize="1.1rem"; m2.textContent="All you have to do is show up and dress nicely, I've planned everything for us. See you at home 💘";
@@ -88,4 +182,6 @@ function showSecondCard() {
   };
 }
 </script>
+
 </body>
+</html>
