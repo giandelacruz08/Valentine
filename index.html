@@ -97,7 +97,7 @@ window.addEventListener("DOMContentLoaded", function() {
   audio.volume = 0.6;
 
   revealBtn.onclick = function() {
-    // Play audio immediately on click
+    // Play audio on click
     audio.currentTime = 0;
     audio.play().then(()=>{
       showSecondCard();
@@ -158,17 +158,17 @@ window.addEventListener("DOMContentLoaded", function() {
 
     // YES button click
     yesBtn.onclick=function(){
-      audio.pause();
+      // Music continues
       document.body.innerHTML="";
       document.body.style.background="linear-gradient(135deg,#ff758c,#ff7eb3,#fad0c4)";
 
       const finalCard=document.createElement("div"); finalCard.className="card";
 
-      const t=document.createElement("h1"); t.textContent="YAY!!! 🫶💕💖";
-      const gif=document.createElement("img"); gif.src="images/kim.gif"; gif.alt="Valentine GIF";
+      const t = document.createElement("h1"); t.textContent="YAY!!! 🫶💕💖";
+      const gif = document.createElement("img"); gif.src="images/kims.gif"; gif.alt="Valentine GIF";
 
-      const m1=document.createElement("p"); m1.style.fontSize="1.3rem"; m1.textContent="Happy Valentine's, my love 🥰";
-      const m2=document.createElement("p"); m2.style.fontSize="1.1rem"; m2.textContent="All you have to do is show up and dress nicely, I've planned everything for us. See you at home 💘";
+      const m1 = document.createElement("p"); m1.style.fontSize="1.3rem"; m1.textContent="Happy Valentine's, my love 🥰";
+      const m2 = document.createElement("p"); m2.style.fontSize="1.1rem"; m2.textContent="All you have to do is show up and dress nicely, I've planned everything for us. See you at home 💘";
 
       finalCard.appendChild(t);
       finalCard.appendChild(gif);
