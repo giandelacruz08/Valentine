@@ -11,29 +11,25 @@ button:hover { background:#e63946; }
 </style>
 </head>
 <body>
+  <h1>Test Audio</h1>
+  <button id="testBtn">Play Music</button>
 
-<h1>Test Audio</h1>
-<button id="testBtn">Play Music</button>
+  <audio id="bgMusic" preload="auto">
+    <source src="audio/audiounchained-melody.mp3" type="audio/mpeg">
+  </audio>
 
-<audio id="bgMusic" preload="auto">
-  <source src="audio/audiounchained-melody.mp3" type="audio/mpeg">
-</audio>
+  <script>
+    const testBtn = document.getElementById("testBtn");
+    const audio = document.getElementById("bgMusic");
+    audio.volume = 0.6;
+    audio.load();
 
-<script>
-const testBtn = document.getElementById("testBtn");
-const audio = document.getElementById("bgMusic");
-audio.volume = 0.6;
-audio.load();
-
-testBtn.onclick = function() {
-  audio.play().then(() => {
-    alert("Music is playing! ✅");
-  }).catch(err => {
-    alert("Playback failed ❌ Check console");
-    console.log("Playback error:", err);
-  });
-};
-</script>
-
+    testBtn.onclick = function() {
+      audio.play().then(() => alert("Music is playing! ✅"))
+        .catch(err => { alert("Playback failed ❌"); console.log(err); });
+    };
+  </script>
 </body>
+
 </html>
+
