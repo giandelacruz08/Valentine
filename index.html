@@ -102,132 +102,133 @@ button:hover { transform: scale(1.05); background: #e63946; }
   <button id="revealBtn">Continue</button>
 </div>
 
-<!-- Reliable audio setup -->
+<!-- Reliable audio -->
 <audio id="bgMusic" preload="auto">
   <source src="audio/audiounchained-melody.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-const revealBtn = document.getElementById("revealBtn");
-const audio = document.getElementById("bgMusic");
+window.addEventListener("DOMContentLoaded", function () {
 
-audio.volume = 0.6;
-audio.load(); // ensure it's ready
+  const revealBtn = document.getElementById("revealBtn");
+  const audio = document.getElementById("bgMusic");
 
-revealBtn.onclick = function () {
+  audio.volume = 0.6;
+  audio.load();
 
-  // Start music FIRST (most reliable method)
-  audio.play().then(() => {
+  revealBtn.addEventListener("click", function () {
 
-    // Small delay before heavy DOM changes
-    setTimeout(() => {
+    console.log("Button clicked"); // Debug
 
-      document.getElementById("firstPage").style.display = "none";
+    audio.play().then(function () {
+
+      console.log("Music started");
+
+      // Hide first card
+      const firstPage = document.getElementById("firstPage");
+      if (firstPage) firstPage.style.display = "none";
 
       document.body.style.background =
         "linear-gradient(135deg, #ff9a9e, #fecfef, #a18cd1, #fbc2eb)";
 
-      buildSecondCard();
+      // Build second card
+      const card = document.createElement("div");
+      card.className = "card";
 
-    }, 150);
+      const title = document.createElement("h1");
+      title.textContent = "Inah, my love 🫶";
 
-  }).catch(err => {
-    console.log("Playback failed:", err);
+      const subtitle = document.createElement("h2");
+      subtitle.textContent = "Will you be my Valentine? 💘";
+
+      const img = document.createElement("img");
+      img.src = "images/picture.jpg";
+
+      const btnContainer = document.createElement("div");
+      btnContainer.className = "btn-container";
+
+      const yesBtn = document.createElement("button");
+      yesBtn.textContent = "Yurr 💖";
+
+      const noBtn = document.createElement("button");
+      noBtn.textContent = "Naurr 😝";
+      noBtn.id = "noBtn";
+
+      btnContainer.appendChild(yesBtn);
+      btnContainer.appendChild(noBtn);
+
+      card.appendChild(title);
+      card.appendChild(subtitle);
+      card.appendChild(img);
+      card.appendChild(btnContainer);
+
+      document.body.appendChild(card);
+
+      // Floating hearts
+      const emojis = ["🫶","💖","💕","💘","🥰","😍"];
+      setInterval(()=>{
+        const heart = document.createElement("div");
+        heart.className="hearts";
+        heart.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+        heart.style.left = Math.random()*100+"vw";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),6000);
+      },500);
+
+      // NO button
+      noBtn.onmouseover = moveNo;
+      noBtn.ontouchstart = moveNo;
+
+      function moveNo() {
+        noBtn.style.position = "fixed";
+        const vw = window.innerWidth - noBtn.offsetWidth;
+        const vh = window.innerHeight - noBtn.offsetHeight;
+        noBtn.style.left = Math.random() * vw + "px";
+        noBtn.style.top = Math.random() * vh + "px";
+      }
+
+      // YES button
+      yesBtn.onclick = function () {
+        audio.pause(); // stop music
+
+        document.body.innerHTML = "";
+        document.body.style.background =
+          "linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4)";
+
+        const finalCard = document.createElement("div");
+        finalCard.className = "card";
+
+        const title = document.createElement("h1");
+        title.textContent = "YAY!!! 🫶💕💖";
+
+        const gif = document.createElement("img");
+        gif.src = "images/kim.gif";
+
+        const message1 = document.createElement("p");
+        message1.style.fontSize = "1.3rem";
+        message1.textContent = "Happy Valentine's, my love 🥰";
+
+        const message2 = document.createElement("p");
+        message2.style.fontSize = "1.1rem";
+        message2.textContent =
+          "All you have to do is show up and dress nicely, I've planned everything for us. See you at home 💘";
+
+        finalCard.appendChild(title);
+        finalCard.appendChild(gif);
+        finalCard.appendChild(message1);
+        finalCard.appendChild(message2);
+
+        document.body.appendChild(finalCard);
+      };
+
+    }).catch(function (err) {
+      console.log("Playback blocked:", err);
+      alert("Music failed to play. Please tap anywhere on the page to start it.");
+    });
+
   });
-};
 
-function buildSecondCard() {
-
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const title = document.createElement("h1");
-  title.textContent = "Inah, my love 🫶";
-
-  const subtitle = document.createElement("h2");
-  subtitle.textContent = "Will you be my Valentine? 💘";
-
-  const img = document.createElement("img");
-  img.src = "images/picture.jpg";
-
-  const btnContainer = document.createElement("div");
-  btnContainer.className = "btn-container";
-
-  const yesBtn = document.createElement("button");
-  yesBtn.textContent = "Yurr 💖";
-
-  const noBtn = document.createElement("button");
-  noBtn.textContent = "Naurr 😝";
-
-  btnContainer.appendChild(yesBtn);
-  btnContainer.appendChild(noBtn);
-
-  card.appendChild(title);
-  card.appendChild(subtitle);
-  card.appendChild(img);
-  card.appendChild(btnContainer);
-
-  document.body.appendChild(card);
-
-  // Floating hearts
-  const emojis = ["🫶","💖","💕","💘","🥰","😍"];
-  setInterval(()=>{
-    const heart = document.createElement("div");
-    heart.className="hearts";
-    heart.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-    heart.style.left = Math.random()*100+"vw";
-    document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(),6000);
-  },500);
-
-  // NO button runs
-  noBtn.onmouseover = moveNo;
-  noBtn.ontouchstart = moveNo;
-
-  function moveNo() {
-    noBtn.style.position = "fixed";
-    const vw = window.innerWidth - noBtn.offsetWidth;
-    const vh = window.innerHeight - noBtn.offsetHeight;
-    noBtn.style.left = Math.random() * vw + "px";
-    noBtn.style.top = Math.random() * vh + "px";
-  }
-
-  // YES button
-  yesBtn.onclick = function () {
-
-    // Smooth stop instead of instant kill
-    audio.pause();
-
-    document.body.innerHTML = "";
-    document.body.style.background =
-      "linear-gradient(135deg, #ff758c, #ff7eb3, #fad0c4)";
-
-    const finalCard = document.createElement("div");
-    finalCard.className = "card";
-
-    const title = document.createElement("h1");
-    title.textContent = "YAY!!! 🫶💕💖";
-
-    const gif = document.createElement("img");
-    gif.src = "images/kim.gif";
-
-    const message1 = document.createElement("p");
-    message1.style.fontSize = "1.3rem";
-    message1.textContent = "Happy Valentine's, my love 🥰";
-
-    const message2 = document.createElement("p");
-    message2.style.fontSize = "1.1rem";
-    message2.textContent =
-      "All you have to do is show up and dress nicely, I've planned everything for us. See you at home 💘";
-
-    finalCard.appendChild(title);
-    finalCard.appendChild(gif);
-    finalCard.appendChild(message1);
-    finalCard.appendChild(message2);
-
-    document.body.appendChild(finalCard);
-  };
-}
+});
 </script>
 
 </body>
